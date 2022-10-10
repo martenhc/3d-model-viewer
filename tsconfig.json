@@ -1,0 +1,31 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "build",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "experimentalDecorators": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true
+      }
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@asset/*": ["src/asset/*"],
+      "@component/*": ["src/component/*"],
+      "@config/*": ["src/config/*"],
+      "@data/*": ["src/data/*"],
+      "@page/*": ["src/page/*"],
+      "@state/*": ["src/state/*"],
+      "@router/*": ["src/router/*"],
+      "@util/*": ["src/util/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

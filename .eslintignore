@@ -1,0 +1,4 @@
+build/
+src/data/i18n/locale/generated/
+src/data/i18n/locale-codes.ts
+plop-templates/*

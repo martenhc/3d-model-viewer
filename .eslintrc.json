@@ -1,0 +1,4 @@
+{
+  "plugins": ["lit-a11y"],
+  "extends": ["./node_modules/gts/", "plugin:lit-a11y/recommended"]
+}
