@@ -18,18 +18,18 @@ export const styles = css`
     top: 0;
   }
 
-  .hotspots {
+  .hotspot {
     cursor: help;
     left: 50%;
     position: absolute;
     top: 50%;
   }
 
-  .hotspots.visible .label {
+  .hotspot.visible .label {
     transform: scale(1, 1);
   }
 
-  .hotspots .label {
+  .hotspot .label {
     background-color: #00000077;
     border-radius: 50%;
     color: #fff;
@@ -47,7 +47,7 @@ export const styles = css`
     width: 40px;
   }
 
-  .hotspots .text {
+  .hotspot .text {
     background: #00000077;
     border: 1px solid #ffffff77;
     border-radius: 4px;
@@ -67,35 +67,7 @@ export const styles = css`
     width: 200px;
   }
 
-  .hotspots:hover .text {
+  .hotspot:hover .text {
     opacity: 1;
-  }
-
-  .loader {
-    width: 100px;
-    height: 100px;
-    margin: 1em auto;
-    border-radius: 50%;
-    background-image: conic-gradient(#1a73e8 0%, lightgrey 0%);
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 50%;
-    left: 50%;
-    margin-left: -50px;
-    margin-top: -50px;
-  }
-
-  .loader::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
-    background: white;
-    border-radius: inherit;
   }
 `;
