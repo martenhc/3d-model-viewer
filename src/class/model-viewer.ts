@@ -9,17 +9,19 @@ import {
   Raycaster,
   LoadingManager,
   ShaderMaterial,
+  Vector3,
 } from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+import {Tween, update as tweenUpdate} from '@tweenjs/tween.js';
 
 export class ModelViewer {
   private _modelUrl: string;
-  private _animationFrameId: number;
+  private _animationFrameId: number = 0;
   private _scene: Scene;
-  private _camera: PerspectiveCamera;
-  private _renderer: WebGLRenderer;
-  private _controls: TrackballControls;
+  private _camera!: PerspectiveCamera;
+  private _renderer!: WebGLRenderer;
+  private _controls!: TrackballControls;
   private _hotspots: Array<ModelHotspot>;
   private _overlayShader: ShaderMaterial;
 
@@ -93,6 +95,7 @@ export class ModelViewer {
 
     this._renderer.render(this._scene, this._camera);
 
+    tweenUpdate();
     this._animationFrameId = window.requestAnimationFrame(this._start);
   };
 
@@ -130,6 +133,10 @@ export class ModelViewer {
       100
     );
     this._scene.add(this._camera);
+  }
+
+  centerCamera(position: Vector3) {
+    new Tween(this._camera.position).to(position, 1500).start();
   }
 
   loadSceneAndStart() {

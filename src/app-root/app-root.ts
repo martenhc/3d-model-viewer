@@ -1,11 +1,13 @@
-import {LitElement, html, nothing} from 'lit';
-import {customElement, query, queryAll, state} from 'lit/decorators.js';
+import {LitElement, html} from 'lit';
+import {customElement, query, queryAll} from 'lit/decorators.js';
 import {styles} from './app-root-styles';
 import {ModelViewer} from 'src/class/model-viewer';
 import {repeat} from 'lit/directives/repeat.js';
-import {when} from 'lit/directives/when.js';
 import {Hotspot} from '@data/type/hotspot';
-import {getModelViewerHotspotInformation} from '@util/hotspot';
+import {
+  coordinatesArrayToVector3,
+  getModelViewerHotspotInformation,
+} from '@util/hotspot';
 import {LoaderElement} from '@component/loader-element/loader-element';
 import '@component/loader-element/loader-element';
 
@@ -60,12 +62,25 @@ export class AppRoot extends LitElement {
     this._modelViewer.destroy();
   }
 
+  private _onHotspotClick = (event: Event) => {
+    const hostpotIndex = parseInt(
+      (event.target as HTMLDivElement).getAttribute('data-index') || '0'
+    );
+
+    this._modelViewer.centerCamera(
+      coordinatesArrayToVector3(this._hotspots[hostpotIndex].position)
+    );
+  };
+
   render() {
     return html`
       ${repeat(
         this._hotspots,
-        (hotspot: Hotspot, index: number) => html`<div class="hotspot">
-          <div class="label">${index + 1}</div>
+        (hotspot: Hotspot, index: number) => html`<div
+          class="hotspot"
+          @click=${this._onHotspotClick}
+        >
+          <div class="label" data-index=${index}>${index + 1}</div>
           <div class="text">${hotspot.text}</div>
         </div>`
       )}
