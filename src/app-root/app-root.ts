@@ -62,7 +62,7 @@ export class AppRoot extends LitElement {
     this._modelViewer.destroy();
   }
 
-  private _onHotspotClick = (event: Event) => {
+  private _onHotspotClick(event: Event) {
     const hostpotIndex = parseInt(
       (event.target as HTMLDivElement).getAttribute('data-index') || '0'
     );
@@ -70,10 +70,16 @@ export class AppRoot extends LitElement {
     this._modelViewer.centerCamera(
       coordinatesArrayToVector3(this._hotspots[hostpotIndex].position)
     );
-  };
+  }
+
+  private _onResetCamera() {
+    this._modelViewer.resetCamera();
+  }
 
   render() {
     return html`
+      <button @click=${this._onResetCamera}>RESET CAMERA</button>
+
       ${repeat(
         this._hotspots,
         (hotspot: Hotspot, index: number) => html`<div

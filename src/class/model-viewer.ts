@@ -13,7 +13,7 @@ import {
 } from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import {Tween, update as tweenUpdate} from '@tweenjs/tween.js';
+import {Tween, update as tweenUpdate, Easing} from '@tweenjs/tween.js';
 
 export class ModelViewer {
   private _modelUrl: string;
@@ -136,7 +136,17 @@ export class ModelViewer {
   }
 
   centerCamera(position: Vector3) {
-    new Tween(this._camera.position).to(position, 1500).start();
+    new Tween(this._camera.position)
+      .to(position, 1500)
+      .easing(Easing.Circular.Out)
+      .start();
+  }
+
+  resetCamera() {
+    new Tween(this._camera.position)
+      .to(new Vector3(0, 0, this._controls.minDistance), 1500)
+      .easing(Easing.Circular.Out)
+      .start();
   }
 
   loadSceneAndStart() {
