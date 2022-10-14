@@ -1,11 +1,14 @@
 import {ModelHotspot} from '@data/type/hotspot';
 import {centerModel, debounce} from '@util/index';
+import {getOverlayShader} from '@util/shader';
 import {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
   AmbientLight,
   Raycaster,
+  LoadingManager,
+  ShaderMaterial,
 } from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -18,6 +21,14 @@ export class ModelViewer {
   private _renderer: WebGLRenderer;
   private _controls: TrackballControls;
   private _hotspots: Array<ModelHotspot>;
+  private _overlayShader: ShaderMaterial;
+
+  public onLoadFinish: () => void = () => {};
+  public onLoadProgress: (
+    url: string,
+    loadedItemAmount: number,
+    totalItemAmount: number
+  ) => void = () => {};
 
   private _sizes = {
     width: window.innerWidth,
@@ -36,6 +47,7 @@ export class ModelViewer {
     this._createAndSetupRenderer(canvas);
     this._createAndAddPerspectiveCameraToScene();
     this._setUpControls(canvas);
+    this._overlayShader = getOverlayShader(this._scene);
 
     window.addEventListener('resize', this._onResize);
   }
@@ -120,15 +132,27 @@ export class ModelViewer {
     this._scene.add(this._camera);
   }
 
-  loadModelAndStart() {
-    new GLTFLoader().load(this._modelUrl, ({scene: model}) => {
+  loadSceneAndStart() {
+    const loadingManager = new LoadingManager(
+      // Loaded
+      () => {
+        // Give some space for progress to finish
+        setTimeout(() => {
+          this.onLoadFinish();
+          this._overlayShader.uniforms.uAlpha.value = 0;
+
+          this._start();
+        }, 150);
+      },
+      this.onLoadProgress
+    );
+
+    new GLTFLoader(loadingManager).load(this._modelUrl, ({scene: model}) => {
       centerModel(model, this._camera, this._controls); //, true);
       this._scene.add(model);
 
       const light = new AmbientLight(0xffffff);
       this._scene.add(light);
-
-      this._start();
     });
   }
 

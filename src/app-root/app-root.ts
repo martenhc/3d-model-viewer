@@ -10,10 +10,10 @@ import {getModelViewerHotspotInformation} from '@util/hotspot';
 export class AppRoot extends LitElement {
   static styles = styles;
 
-  @query('.modelCanvas') private $modelCanvas!: HTMLCanvasElement;
+  @query('.model-canvas') private $modelCanvas!: HTMLCanvasElement;
+  @query('.loader') private $loader!: HTMLDivElement;
   @queryAll('.hotspots') private $domHotspots!: NodeListOf<HTMLDivElement>;
 
-  // private _isLoaded = false;
   private _modelViewer: ModelViewer;
   private _hotspots: Array<Hotspot> = [
     {
@@ -46,7 +46,22 @@ export class AppRoot extends LitElement {
       modelViewerHotspots
     );
 
-    this._modelViewer.loadModelAndStart();
+    this._modelViewer.onLoadProgress = (
+      _,
+      loadedItemAmount,
+      totalItemAmount
+    ) => {
+      const progressRatio = loadedItemAmount / totalItemAmount;
+      this.$loader.style.backgroundImage = `conic-gradient(#1a73e8 ${
+        progressRatio * 100
+      }%, lightgrey 0%)`;
+    };
+
+    this._modelViewer.onLoadFinish = () => {
+      this.$loader.style.display = 'none';
+    };
+
+    this._modelViewer.loadSceneAndStart();
   }
 
   disconnectedCallback(): void {
@@ -59,13 +74,15 @@ export class AppRoot extends LitElement {
       ${repeat(
         this._hotspots,
         (hotspot: Hotspot, index: number) => html`<div
-          class="hotspots hotspot-${index} visible"
+          class="hotspots hotspot-${index}"
         >
           <div class="label">${index + 1}</div>
           <div class="text">${hotspot.text}</div>
         </div>`
       )}
-      <canvas class="modelCanvas"></canvas>
+
+      <canvas class="model-canvas"></canvas>
+      <div class="loader"></div>
     `;
   }
 }
