@@ -10,6 +10,7 @@ import {
   LoadingManager,
   ShaderMaterial,
   Vector3,
+  PointLight,
 } from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -132,6 +133,13 @@ export class ModelViewer {
       0.1,
       100
     );
+
+    const light = new AmbientLight(0xffffff, 0.1);
+    this._scene.add(light);
+
+    const cameraLight = new PointLight(0xffffff, 1);
+    this._camera.add(cameraLight);
+
     this._scene.add(this._camera);
   }
 
@@ -167,9 +175,6 @@ export class ModelViewer {
     new GLTFLoader(loadingManager).load(this._modelUrl, ({scene: model}) => {
       centerModel(model, this._camera, this._controls); //, true);
       this._scene.add(model);
-
-      const light = new AmbientLight(0xffffff);
-      this._scene.add(light);
     });
   }
 
