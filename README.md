@@ -22,4 +22,3 @@ A tool to calculate the hotspots coordinates will be built after the module is r
 - `dev`: Run dev server on port 3000.
 - `build`: Build bundle.
 - `serve`: Serve build on port 8080.
-
