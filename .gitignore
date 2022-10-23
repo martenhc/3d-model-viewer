@@ -134,6 +134,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# i18n generated files
-src/data/i18n/locale/generated

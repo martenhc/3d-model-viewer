@@ -1,6 +1,5 @@
 import {ModelHotspot} from '@data/type/hotspot';
-import {centerModel, debounce} from '@util/index';
-import {getOverlayShader} from '@util/shader';
+import {getOverlayShader, centerModel, debounce} from '@util/index';
 import {
   WebGLRenderer,
   Scene,

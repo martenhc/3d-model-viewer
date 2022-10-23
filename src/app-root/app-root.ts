@@ -7,7 +7,7 @@ import {Hotspot} from '@data/type/hotspot';
 import {
   coordinatesArrayToVector3,
   getModelViewerHotspotInformation,
-} from '@util/hotspot';
+} from '@util/index';
 import {LoaderElement} from '@component/loader-element/loader-element';
 import '@component/loader-element/loader-element';
 
