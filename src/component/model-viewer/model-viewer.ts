@@ -1,6 +1,6 @@
 import {LitElement, html} from 'lit';
-import {customElement, query, queryAll} from 'lit/decorators.js';
-import {styles} from './app-root-styles';
+import {customElement, property, query, queryAll} from 'lit/decorators.js';
+import {styles} from './styles';
 import {ModelViewer} from 'src/class/model-viewer';
 import {repeat} from 'lit/directives/repeat.js';
 import {Hotspot} from '@data/type/hotspot';
@@ -11,29 +11,18 @@ import {
 import {LoaderElement} from '@component/loader-element/loader-element';
 import '@component/loader-element/loader-element';
 
-@customElement('app-root')
-export class AppRoot extends LitElement {
+@customElement('model-viewer')
+export class ModelViewerElement extends LitElement {
   static styles = styles;
+
+  @property({type: String}) modelUrl!: string;
+  @property({type: Array}) hotspots: ReadonlyArray<Hotspot> = [];
 
   @query('.model-canvas') private $modelCanvas!: HTMLCanvasElement;
   @query('loader-element') private $loaderElement!: LoaderElement;
   @queryAll('.hotspot') private $domHotspots!: NodeListOf<HTMLDivElement>;
 
   private _modelViewer!: ModelViewer;
-  private _hotspots: Array<Hotspot> = [
-    {
-      position: [0.2, 0.3, 0.15],
-      text: 'This is one hotspot',
-    },
-    {
-      position: [0.1, 0.7, -0.2],
-      text: 'This is a second hotspot',
-    },
-    {
-      position: [-0.1, -0.35, 0.1],
-      text: 'This is the last hotspot',
-    },
-  ];
 
   // Not doing it on connectedCallback because
   // we need _modelCanvas to be populated
@@ -42,12 +31,12 @@ export class AppRoot extends LitElement {
 
     const modelViewerHotspots = getModelViewerHotspotInformation(
       this.$domHotspots,
-      this._hotspots.map(hotspot => hotspot.position)
+      this.hotspots.map(hotspot => hotspot.position)
     );
 
     this._modelViewer = new ModelViewer(
       this.$modelCanvas,
-      '/static/model/astronaut.glb',
+      this.modelUrl,
       modelViewerHotspots
     );
 
@@ -68,7 +57,7 @@ export class AppRoot extends LitElement {
     );
 
     this._modelViewer.centerCamera(
-      coordinatesArrayToVector3(this._hotspots[hostpotIndex].position)
+      coordinatesArrayToVector3(this.hotspots[hostpotIndex].position)
     );
   }
 
@@ -79,9 +68,9 @@ export class AppRoot extends LitElement {
   render() {
     return html`
       <button @click=${this._onResetCamera}>RESET CAMERA</button>
-
-      ${repeat(
-        this._hotspots,
+      ${this.hotspots &&
+      repeat(
+        this.hotspots,
         (hotspot: Hotspot, index: number) => html`<div
           class="hotspot"
           @click=${this._onHotspotClick}
@@ -94,5 +83,11 @@ export class AppRoot extends LitElement {
       <loader-element></loader-element>
       <canvas class="model-canvas"></canvas>
     `;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'model-viewer': ModelViewerElement;
   }
 }
