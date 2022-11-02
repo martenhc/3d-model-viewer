@@ -1,6 +1,16 @@
 {
-  "name": "lit-scaffold",
+  "name": "3d-model-viewer",
+  "type": "module",
   "version": "0.0.0",
+  "files": ["build"],
+  "main": "./build/3d-model-viewer.umd.cjs",
+  "module": "./build/3d-model-viewer.es.js",
+  "exports": {
+    ".": {
+      "import": "./build/3d-model-viewer.es.js",
+      "require": "./build/3d-model-viewer.umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -37,9 +47,6 @@
     "ts-lit-plugin": "^1.0.5",
     "typescript": "^4.5.2",
     "vite": "^2.6.4",
-    "vite-plugin-favicon2": "^1.1.4",
-    "vite-plugin-html": "^2.1.1",
-    "vite-plugin-imagemin": "^0.1.0",
     "vite-tsconfig-paths": "^3.5.0"
   },
   "engines": {

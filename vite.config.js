@@ -3,33 +3,8 @@ import del from 'rollup-plugin-delete';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import summary from 'rollup-plugin-summary';
-import viteImagemin from 'vite-plugin-imagemin';
-import {ViteFaviconsPlugin} from 'vite-plugin-favicon2';
-import {minifyHtml} from 'vite-plugin-html';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-const metaInject = () => {
-  return {
-    name: 'meta-inject',
-    transformIndexHtml() {
-      return [
-        {
-          tag: 'meta',
-          attrs: {
-            charset: 'UTF-8',
-          },
-        },
-        {
-          tag: 'meta',
-          attrs: {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0',
-          },
-        },
-      ];
-    },
-  };
-};
+import {resolve as pathResolve} from 'path';
 
 export default defineConfig(({command, mode}) => {
   const isPwa = process.env.buildType === 'pwa';
@@ -41,7 +16,7 @@ export default defineConfig(({command, mode}) => {
        >> Your build will containt a service worker to provide the necessary behavior.`
     );
 
-  const vitePlugins = [metaInject(), tsconfigPaths()];
+  const vitePlugins = [tsconfigPaths()];
 
   const rollupOptions = {
     plugins: [
@@ -58,58 +33,14 @@ export default defineConfig(({command, mode}) => {
 
   if (command === 'build') {
     return {
-      plugins: [
-        ...vitePlugins,
-        ViteFaviconsPlugin({
-          logo: './src/favicon.svg',
-          outputPath: 'metadata',
-          favicons: {
-            appName: 'media-monks-lit-scaffold',
-            appDescription: 'Media.Monks Lit Scaffold',
-            developerName: 'Media.Monks',
-            background: '#333',
-            theme_color: '#333',
-            start_url: '/index.html',
-            scope: './',
-            display: 'standalone',
-            icons: {
-              coast: false,
-              yandex: false,
-            },
-          },
-        }),
-        viteImagemin({
-          exclude: ['./src/asset/'],
-          gifsicle: {
-            optimizationLevel: 7,
-            interlaced: false,
-          },
-          optipng: {
-            optimizationLevel: 5,
-          },
-          mozjpeg: {
-            quality: 50,
-          },
-          pngquant: {
-            quality: [0.8, 0.9],
-            speed: 4,
-          },
-          svgo: {
-            plugins: [
-              {
-                name: 'removeViewBox',
-              },
-              {
-                name: 'removeEmptyAttrs',
-                active: false,
-              },
-            ],
-          },
-        }),
-        minifyHtml(),
-      ],
+      plugins: [...vitePlugins],
       build: {
         rollupOptions,
+        lib: {
+          entry: pathResolve('./main.js'),
+          name: '3DModelViewer',
+          fileName: '3d-model-viewer',
+        },
         outDir: 'build',
         assetsDir: 'asset',
         minify: 'terser',
