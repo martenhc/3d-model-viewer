@@ -28,7 +28,7 @@ A tool to calculate the hotspots coordinates will be built after the module is r
     </model-viewer>
 ```
 
-### Tech stack
+### Tech stack / dependencies
 
 - [Lit](https://lit.dev)
 - [ThreeJS](https://threejs.org/)
