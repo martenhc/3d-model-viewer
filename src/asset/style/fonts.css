@@ -1,9 +1,0 @@
-/*
-    To add your custom fonts, add them in `/public/static/font` and then write a font-face as follows:
-
-    @font-face {
-      font-family: 'Your Font';
-      src: url('/static/font/your-font/your-font.woff2') format('woff2');
-      font-display: swap;
-    }
- */

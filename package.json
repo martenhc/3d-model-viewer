@@ -1,7 +1,7 @@
 {
   "name": "3d-model-viewer",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "files": ["build"],
   "main": "./build/3d-model-viewer.umd.cjs",
   "module": "./build/3d-model-viewer.es.js",
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "@rollup/plugin-replace": "^3.0.0",
     "@types/node": "^14.17.34",
     "@types/three": "^0.144.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
