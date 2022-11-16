@@ -22,8 +22,8 @@ export class ModelViewer {
   private _camera!: PerspectiveCamera;
   private _renderer!: WebGLRenderer;
   private _controls!: TrackballControls;
-  private _hotspots: Array<ModelHotspot>;
   private _overlayShader: ShaderMaterial;
+  public hotspots: Array<ModelHotspot>;
 
   public onLoadFinish: () => void = () => {};
   public onLoadProgress: (
@@ -43,7 +43,7 @@ export class ModelViewer {
     hotspots: Array<ModelHotspot> = []
   ) {
     this._modelUrl = modelUrl;
-    this._hotspots = hotspots;
+    this.hotspots = hotspots;
     this._scene = new Scene();
 
     this._createAndSetupRenderer(canvas);
@@ -55,11 +55,11 @@ export class ModelViewer {
   }
 
   private _setUpHotspots() {
-    if (this._hotspots.length === 0) return;
+    if (this.hotspots.length === 0) return;
 
     const raycaster = new Raycaster();
 
-    for (const hotspot of this._hotspots) {
+    for (const hotspot of this.hotspots) {
       const screenPosition = hotspot.position.clone();
       screenPosition.project(this._camera);
       raycaster.setFromCamera(screenPosition, this._camera);
@@ -154,6 +154,8 @@ export class ModelViewer {
       .to(new Vector3(0, 0, this._controls.minDistance), 1500)
       .easing(Easing.Circular.Out)
       .start();
+
+    this._controls.reset();
   }
 
   loadSceneAndStart() {

@@ -16,19 +16,17 @@ export class ModelViewerElement extends LitElement {
   static styles = styles;
 
   @property({type: String}) modelUrl!: string;
-  @property({type: Array}) hotspots: ReadonlyArray<Hotspot> = [];
+  @property({type: Array}) hotspots: Array<Hotspot> = [];
 
   @query('.model-canvas') private $modelCanvas!: HTMLCanvasElement;
   @query('loader-element') private $loaderElement!: LoaderElement;
-  @queryAll('.hotspot') private $domHotspots!: NodeListOf<HTMLDivElement>;
+  @queryAll('.hotspot') protected $domHotspots!: NodeListOf<HTMLDivElement>;
 
-  private _modelViewer!: ModelViewer;
+  protected _modelViewer!: ModelViewer;
 
   // Not doing it on connectedCallback because
   // we need _modelCanvas to be populated
   protected firstUpdated(): void {
-    super.connectedCallback();
-
     const modelViewerHotspots = getModelViewerHotspotInformation(
       this.$domHotspots,
       this.hotspots.map(hotspot => hotspot.position)

@@ -17,7 +17,8 @@ export class LoaderElement extends LitElement {
     totalItemAmount: number
   ) => {
     const currentValue = (loadedItemAmount / totalItemAmount) * 100;
-    this.$loader.style.backgroundImage = `conic-gradient(#1a73e8 ${currentValue}%, lightgrey 0%)`;
+    if (this.$loader)
+      this.$loader.style.backgroundImage = `conic-gradient(#1a73e8 ${currentValue}%, lightgrey 0%)`;
   };
 
   public onProgressFinish = () => (this._isLoading = false);
