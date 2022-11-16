@@ -3,11 +3,14 @@ import {Hotspot, VectorUpdate} from '@data/type/hotspot';
 import {getModelViewerHotspotInformation} from '@util/hotspot';
 import {html} from 'lit';
 import {customElement} from 'lit/decorators.js';
+import {repeat} from 'lit/directives/repeat.js';
+import {styles} from './styles';
 import '@component/vector-control-element/vector-control-element';
-import { throws } from 'assert';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
+  static styles = [...super.styles, styles];
+
   private _configureHotspots(hotspots: Array<Hotspot>) {
     const modelViewerHotspots = getModelViewerHotspotInformation(
       this.$domHotspots,
@@ -18,30 +21,45 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   }
 
   private _onValueChanged({hotspotIndex, axisIndex, value}: VectorUpdate) {
-    this.hotspots = this.hotspots.reduce(function (hotspots, currentHotspot, currentIndex)  {
-      if (currentIndex === hotspotIndex ) {
+    this.hotspots = this.hotspots.reduce(function (
+      hotspots,
+      currentHotspot,
+      currentIndex
+    ) {
+      if (currentIndex === hotspotIndex) {
         hotspots.push({
           ...currentHotspot,
-          position: currentHotspot.position.reduce(function (newPosition, _, positionIndex) {
-            newPosition[positionIndex] = axisIndex ===  positionIndex ? value : currentHotspot.position[positionIndex];
+          position: currentHotspot.position.reduce(
+            function (newPosition, _, positionIndex) {
+              newPosition[positionIndex] =
+                axisIndex === positionIndex
+                  ? value
+                  : currentHotspot.position[positionIndex];
 
-            return newPosition;
-          }, [0, 0, 0])
-        })
+              return newPosition;
+            },
+            [0, 0, 0]
+          ),
+        });
       } else hotspots.push(currentHotspot);
 
       return hotspots;
-    }, [] as Array<Hotspot>);
+    },
+    [] as Array<Hotspot>);
 
     this._configureHotspots(this.hotspots);
   }
 
   render() {
     return html`
-      <vector-control-element
-        .hotspotIndex=${0}
-        .onValueChanged=${this._onValueChanged.bind(this)}
-      ></vector-control-element>
+      <div class="controls-wrapper">
+        ${repeat(this.hotspots, (_, index) => {
+          return html`<vector-control-element
+            .hotspotIndex=${index}
+            .onValueChanged=${this._onValueChanged.bind(this)}
+          ></vector-control-element>`;
+        })}
+      </div>
       ${super.render()}
     `;
   }

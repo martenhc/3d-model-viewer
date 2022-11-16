@@ -13,7 +13,7 @@ import '@component/loader-element/loader-element';
 
 @customElement('model-viewer')
 export class ModelViewerElement extends LitElement {
-  static styles = styles;
+  static styles = [styles];
 
   @property({type: String}) modelUrl!: string;
   @property({type: Array}) hotspots: Array<Hotspot> = [];
