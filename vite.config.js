@@ -24,12 +24,13 @@ export default defineConfig(({command}) => {
           fileName: '3d-model-viewer',
         },
         outDir: 'build',
-        minify: 'terser',
-        TerserOptions: {
-          ecma: 2020,
-          module: true,
-          warnings: true,
-        },
+        // Script minification doesn't work in lib mode. https://github.com/vitejs/vite/issues/6555
+        // minify: 'terser',
+        // TerserOptions: {
+        //   ecma: 2020,
+        //   module: true,
+        //   warnings: true,
+        // },
       },
     };
   } else if (command === 'serve') {
