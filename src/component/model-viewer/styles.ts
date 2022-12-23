@@ -60,4 +60,8 @@ export const styles = css`
   .hotspot:hover .text {
     opacity: 1;
   }
+
+  .reset {
+    margin-left: 85%;
+  }
 `;

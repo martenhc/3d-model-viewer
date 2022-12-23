@@ -1,10 +1,14 @@
 import {VectorUpdate} from '@data/type/hotspot';
 import {html, LitElement} from 'lit';
 import {repeat} from 'lit/directives/repeat.js';
-import {customElement, property, queryAll} from 'lit/decorators.js';
+import {customElement, property, queryAll, state} from 'lit/decorators.js';
+import {classMap} from 'lit/directives/class-map.js';
+import {styles} from './styles';
 
 @customElement('vector-control-element')
 export class VectorControlElement extends LitElement {
+  static styles = styles;
+
   @queryAll('.slidebar') private $slidebars!: Array<HTMLInputElement>;
   @queryAll('.number') private $numbers!: Array<HTMLInputElement>;
 
@@ -12,6 +16,8 @@ export class VectorControlElement extends LitElement {
     vectorUpdate: VectorUpdate
   ) => void;
   @property({type: Number}) hotspotIndex!: number;
+
+  @state() _isOpen = false;
 
   protected firstUpdated(): void {
     const that = this;
@@ -35,30 +41,42 @@ export class VectorControlElement extends LitElement {
     this.$numbers.forEach(number => (number.oninput = _onInput));
   }
 
+  private _onControlsClick() {
+    this._isOpen = !this._isOpen;
+  }
+
   render() {
-    return html`<h4>Controls for hotspot nr. ${this.hotspotIndex + 1}</h4>
-      ${repeat(
-        ['x', 'y', 'z'],
-        (axisName, index) => html`<div>
-          ${axisName}:
-          <input
-            data-axis-index=${index}
-            class="slidebar"
-            type="range"
-            min="-100"
-            max="100"
-            value="0"
-          />
-          <input
-            data-axis-index=${index}
-            class="number"
-            type="number"
-            value="0"
-            min="-100"
-            max="100"
-          />
-        </div>`
-      )}`;
+    return html`<div class="vector-control-wrapper">
+      <button class="button" @click=${this._onControlsClick}>
+        Hotspot #${this.hotspotIndex + 1} <b>></b>
+      </button>
+      <div
+        class="axis-controls-container ${classMap({'is-open': this._isOpen})}"
+      >
+        ${repeat(
+          ['X', 'Y', 'Z'],
+          (axisName, index) => html`<div class="button">
+            <b>${axisName}</b>:
+            <input
+              data-axis-index=${index}
+              class="slidebar"
+              type="range"
+              min="-100"
+              max="100"
+              value="0"
+            />
+            <input
+              data-axis-index=${index}
+              class="number"
+              type="number"
+              value="0"
+              min="-100"
+              max="100"
+            />
+          </div>`
+        )}
+      </div>
+    </div>`;
   }
 }
 
