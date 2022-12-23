@@ -7,31 +7,7 @@ export const styles = css`
   }
 
   .vector-control-wrapper {
-    padding-bottom: 1.5rem;
-  }
-
-  .axis-controls-container {
-    line-height: 3rem;
-    margin: 0.5rem 0 0.5rem 2.5rem;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.25s ease-in-out;
-  }
-
-  .is-open {
-    max-height: 10rem;
-  }
-
-  .button {
-    background: none;
-    background-color: #fff;
-    border: none;
-    border-color: #dadce0;
-    box-shadow: none;
-    cursor: pointer;
-    -webkit-appearance: none;
-    color: var(--blue);
-    font-size: 1.5rem;
+    padding-bottom: 0.5rem;
   }
 
   input[type='range']::-webkit-slider-runnable-track {
