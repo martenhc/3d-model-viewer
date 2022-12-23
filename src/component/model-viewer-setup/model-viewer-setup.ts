@@ -50,15 +50,43 @@ export class ModelViewerSetupElement extends ModelViewerElement {
     this._configureHotspots(this.hotspots);
   }
 
+  private _onAddButtonClick() {
+    this.hotspots.push({
+      position: [0, 0, 0],
+      text: 'new hotspot',
+    });
+
+    this.requestUpdate();
+  }
+
+  private _onRemoveButtonClick(event: Event) {
+    const stringIndex = (event.target as HTMLButtonElement).getAttribute(
+      'data-index'
+    );
+
+    if (typeof stringIndex === 'string') {
+      this.hotspots.splice(parseInt(stringIndex), 1);
+      this.requestUpdate();
+    }
+  }
+
   render() {
     return html`
       <div class="controls-wrapper">
         ${repeat(this.hotspots, (_, index) => {
-          return html`<vector-control-element
-            .hotspotIndex=${index}
-            .onValueChanged=${this._onValueChanged.bind(this)}
-          ></vector-control-element>`;
+          return html` <button
+              data-index=${index}
+              @click=${this._onRemoveButtonClick}
+            >
+              -
+            </button>
+            <vector-control-element
+              .hotspotIndex=${index}
+              .onValueChanged=${this._onValueChanged.bind(this)}
+            ></vector-control-element>`;
         })}
+
+        <button @click=${this._onAddButtonClick}>+</button>
       </div>
       ${super.render()}
     `;
