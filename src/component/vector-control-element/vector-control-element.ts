@@ -16,6 +16,7 @@ export class VectorControlElement extends LitElement {
     vectorUpdate: VectorUpdate
   ) => void;
   @property({type: Number}) hotspotIndex!: number;
+  @property({type: Array}) position!: [number, number, number];
 
   @state() _isOpen = false;
 
@@ -63,13 +64,13 @@ export class VectorControlElement extends LitElement {
               type="range"
               min="-100"
               max="100"
-              value="0"
+              value=${this.position[index] * 100}
             />
             <input
               data-axis-index=${index}
               class="number"
               type="number"
-              value="0"
+              value=${this.position[index] * 100}
               min="-100"
               max="100"
             />

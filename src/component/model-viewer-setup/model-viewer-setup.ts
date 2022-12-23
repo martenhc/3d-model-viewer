@@ -73,7 +73,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   render() {
     return html`
       <div class="controls-wrapper">
-        ${repeat(this.hotspots, (_, index) => {
+        ${repeat(this.hotspots, (hotspot, index) => {
           return html` <button
               data-index=${index}
               @click=${this._onRemoveButtonClick}
@@ -83,6 +83,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
             <vector-control-element
               .hotspotIndex=${index}
               .onValueChanged=${this._onValueChanged.bind(this)}
+              .position=${hotspot.position}
             ></vector-control-element>`;
         })}
 
