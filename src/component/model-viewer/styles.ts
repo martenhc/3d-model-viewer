@@ -62,6 +62,9 @@ export const styles = css`
   }
 
   .reset {
-    margin-left: 85%;
+    position: relative;
+    float: right;
+    font-size: 3rem;
+    left: -5rem;
   }
 `;

@@ -67,7 +67,7 @@ export class ModelViewerElement extends LitElement {
   render() {
     return html`
       <button class="reset" @click=${this._onResetCamera} title="reset camera">
-        &#xf0e2;
+        &#x1F504;
       </button>
       ${this.hotspots &&
       repeat(
