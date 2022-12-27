@@ -26,7 +26,7 @@ export const centerModel = (
     maxDimension + modelDepth / (2 * Math.tan((camera.fov * Math.PI) / 360));
 
   // Prevent the camera from going inside the object
-  const minumumDistance = zDistance * 1.05;
+  const minumumDistance = zDistance * 1.1;
 
   camera.position.z = minumumDistance;
 

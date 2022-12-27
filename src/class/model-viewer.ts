@@ -10,6 +10,7 @@ import {
   ShaderMaterial,
   Vector3,
   PointLight,
+  Group,
 } from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -23,6 +24,7 @@ export class ModelViewer {
   private _renderer!: WebGLRenderer;
   private _controls!: TrackballControls;
   private _overlayShader: ShaderMaterial;
+  private _currentModel: Group | undefined = undefined;
   public hotspots: Array<ModelHotspot>;
 
   public onLoadFinish: () => void = () => {};
@@ -31,6 +33,7 @@ export class ModelViewer {
     loadedItemAmount: number,
     totalItemAmount: number
   ) => void = () => {};
+  public onModelLoadError: (errorMessage: string) => void = () => {};
 
   private _sizes = {
     width: window.innerWidth,
@@ -173,10 +176,27 @@ export class ModelViewer {
       this.onLoadProgress
     );
 
-    new GLTFLoader(loadingManager).load(this._modelUrl, ({scene: model}) => {
-      centerModel(model, this._camera, this._controls); //, true);
-      this._scene.add(model);
-    });
+    // Only one model per scene for the model viewer
+    this._currentModel && this._scene.remove(this._currentModel);
+
+    new GLTFLoader(loadingManager).load(
+      this._modelUrl,
+      ({scene: model}) => {
+        this._currentModel = model;
+        centerModel(model, this._camera, this._controls); //, true);
+        this._scene.add(model);
+      },
+      () => this.onLoadProgress,
+      error => {
+        this.onModelLoadError(error.message);
+      }
+    );
+  }
+
+  updateModelUrl(newModelUrl: string) {
+    this.onModelLoadError('');
+    this._modelUrl = newModelUrl;
+    this.loadSceneAndStart();
   }
 
   destroy() {

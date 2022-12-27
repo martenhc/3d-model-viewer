@@ -6,13 +6,24 @@ import {customElement, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
 import {styles} from './styles';
 import {classMap} from 'lit/directives/class-map.js';
+import {when} from 'lit/directives/when.js';
 import '@component/vector-control-element/vector-control-element';
+import '@component/model-control-element/model-control-element';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
   static styles = [...super.styles, styles];
 
   @state() _openedIndex: number | null = 0;
+
+  protected firstUpdated(): void {
+    super.firstUpdated();
+
+    this._modelViewer.onModelLoadError = errorMessage =>
+      (this._errorMessage = errorMessage);
+  }
+
+  @state() _errorMessage = '';
 
   private _configureHotspots(hotspots: Array<Hotspot>) {
     const modelViewerHotspots = getModelViewerHotspotInformation(
@@ -106,8 +117,19 @@ export class ModelViewerSetupElement extends ModelViewerElement {
     }
   }
 
+  private _onModelChange(event: CustomEvent<string>) {
+    const newModelUrl = event.detail;
+    this._modelViewer.updateModelUrl(newModelUrl);
+    this.hotspots = [];
+    this.requestUpdate();
+  }
+
   render() {
     return html`
+      <model-control-element
+        @model-change=${this._onModelChange}
+        .errorMessage=${this._errorMessage}
+      ></model-control-element>
       <div class="controls-wrapper">
         ${repeat(this.hotspots, (hotspot, index) => {
           return html`<div class="hotspot-settings">
@@ -160,16 +182,18 @@ export class ModelViewerSetupElement extends ModelViewerElement {
             </button>
           </div>`;
         })}
-
-        <button
-          class="text-preview "
-          @click=${this._onAddButtonClick}
-          title="add new hotspot"
-        >
-          &#10133; Add hotspot
-        </button>
+        ${when(!this._errorMessage, () => {
+          return html`<button
+            class="text-preview "
+            @click=${this._onAddButtonClick}
+            title="add new hotspot"
+          >
+            &#10133; Add hotspot
+          </button> `;
+        })}
+        </div>
+        ${super.render()}
       </div>
-      ${super.render()}
     `;
   }
 }

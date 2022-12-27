@@ -46,7 +46,7 @@ export class VectorControlElement extends LitElement {
       ${repeat(
         ['X', 'Y', 'Z'],
         (axisName, index) => html`<div class="button">
-          <b>${axisName}</b>:
+          ${axisName}:
           <input
             data-axis-index=${index}
             class="slidebar"
