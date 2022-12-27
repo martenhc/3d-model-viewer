@@ -70,8 +70,13 @@ export class ModelViewerSetupElement extends ModelViewerElement {
     );
 
     if (typeof stringIndex === 'string') {
-      this.hotspots.splice(parseInt(stringIndex), 1);
-      this.requestUpdate();
+      const wrapperElement = (event.target as HTMLButtonElement).parentElement;
+      wrapperElement?.classList.add('closing');
+
+      setTimeout(() => {
+        this.hotspots.splice(parseInt(stringIndex), 1);
+        this.requestUpdate();
+      }, 250); // 250ms is what the closing animation takes
     }
   }
 
@@ -105,19 +110,23 @@ export class ModelViewerSetupElement extends ModelViewerElement {
     return html`
       <div class="controls-wrapper">
         ${repeat(this.hotspots, (hotspot, index) => {
-          return html`<button
+          return html`<div class="hotspot-settings">
+            <button
               data-index=${index}
-              @click=${this._onRemoveButtonClick}
+              class="headline"
+              @click=${this._onControlsClick}
             >
-              -
+              Hotspot #${index + 1}
             </button>
 
             <button
+              class="text-preview"
               data-index=${index}
-              class="button"
               @click=${this._onControlsClick}
             >
-              Hotspot #${index + 1} <b>></b>
+              (${this.hotspots[index].text.length > 25
+                ? `${this.hotspots[index].text.substring(0, 25)}...`
+                : this.hotspots[index].text})
             </button>
 
             <div
@@ -130,17 +139,35 @@ export class ModelViewerSetupElement extends ModelViewerElement {
                 .onValueChanged=${this._onValueChanged.bind(this)}
                 .position=${hotspot.position}
               ></vector-control-element>
-              Text:
-              <input
-                type="text"
-                value=${hotspot.text}
-                @change=${this._onTextChange}
-                data-index=${index}
-              />
-            </div>`;
+              <div class="text-control-wrapper">
+                Text:
+                <input
+                  type="text"
+                  value=${hotspot.text}
+                  @change=${this._onTextChange}
+                  data-index=${index}
+                />
+              </div>
+            </div>
+
+            <button
+              class="delete-button"
+              data-index=${index}
+              @click=${this._onRemoveButtonClick}
+              title="delete hotspot"
+            >
+              &#x1f5d1;
+            </button>
+          </div>`;
         })}
 
-        <button @click=${this._onAddButtonClick}>+</button>
+        <button
+          class="text-preview "
+          @click=${this._onAddButtonClick}
+          title="add new hotspot"
+        >
+          &#10133; Add hotspot
+        </button>
       </div>
       ${super.render()}
     `;

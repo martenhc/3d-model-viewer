@@ -1,6 +1,5 @@
 import {LitElement, html} from 'lit';
 import {customElement, property, query, queryAll} from 'lit/decorators.js';
-import {styles} from './styles';
 import {ModelViewer} from 'src/class/model-viewer';
 import {repeat} from 'lit/directives/repeat.js';
 import {Hotspot} from '@data/type/hotspot';
@@ -9,11 +8,13 @@ import {
   getModelViewerHotspotInformation,
 } from '@util/index';
 import {LoaderElement} from '@component/loader-element/loader-element';
+import {styles} from './styles';
+import {buttonStyle} from '../../style/button';
 import '@component/loader-element/loader-element';
 
 @customElement('model-viewer')
 export class ModelViewerElement extends LitElement {
-  static styles = [styles];
+  static styles = [buttonStyle, styles];
 
   @property({type: String}) modelUrl!: string;
   @property({type: Array}) hotspots: Array<Hotspot> = [];
@@ -65,7 +66,9 @@ export class ModelViewerElement extends LitElement {
 
   render() {
     return html`
-      <button class="reset" @click=${this._onResetCamera}>RESET CAMERA</button>
+      <button class="reset" @click=${this._onResetCamera} title="reset camera">
+        &#xf0e2;
+      </button>
       ${this.hotspots &&
       repeat(
         this.hotspots,
