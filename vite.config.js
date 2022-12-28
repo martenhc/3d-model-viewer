@@ -1,18 +1,19 @@
 import {defineConfig} from 'vite';
-import {resolve as pathResolve} from 'path';
 import del from 'rollup-plugin-delete';
 import resolve from '@rollup/plugin-node-resolve';
 import summary from 'rollup-plugin-summary';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig(({command}) => {
+export default defineConfig(({command, mode}) => {
   const vitePlugins = [tsconfigPaths()];
 
   const rollupOptions = {
     plugins: [del({targets: 'build/*'}), resolve(), summary()],
   };
 
-  if (command === 'build') {
+  console.debug('[vite.config]', {command, mode});
+
+  if (command === 'build' && mode === 'lib') {
     return {
       plugins: [...vitePlugins],
       publicDir: false,
@@ -32,6 +33,24 @@ export default defineConfig(({command}) => {
         //   warnings: true,
         // },
       },
+    };
+  }
+  if (command === 'build' && mode === 'tool') {
+    return {
+      plugins: [...vitePlugins],
+      build: {
+        rollupOptions,
+        outDir: 'tool-build',
+        assetsDir: 'asset',
+        minify: 'terser',
+        TerserOptions: {
+          ecma: 2020,
+          module: true,
+          warnings: true,
+        },
+        sourcemap: 'hidden',
+      },
+      envPrefix: 'VAR_',
     };
   } else if (command === 'serve') {
     return {

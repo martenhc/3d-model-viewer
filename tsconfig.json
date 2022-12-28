@@ -3,7 +3,11 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "experimentalDecorators": true,
     "module": "ESNext",
     "moduleResolution": "node",
@@ -17,15 +21,35 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@asset/*": ["src/asset/*"],
-      "@component/*": ["src/component/*"],
-      "@config/*": ["src/config/*"],
-      "@data/*": ["src/data/*"],
-      "@page/*": ["src/page/*"],
-      "@state/*": ["src/state/*"],
-      "@router/*": ["src/router/*"],
-      "@util/*": ["src/util/*"]
+      "@asset/*": [
+        "src/asset/*"
+      ],
+      "@component/*": [
+        "src/component/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@data/*": [
+        "src/data/*"
+      ],
+      "@page/*": [
+        "src/page/*"
+      ],
+      "@state/*": [
+        "src/state/*"
+      ],
+      "@router/*": [
+        "src/router/*"
+      ],
+      "@util/*": [
+        "src/util/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "public/static/icon/trashbin.ts"
+  ]
 }
