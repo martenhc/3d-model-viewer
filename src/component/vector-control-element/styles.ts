@@ -3,11 +3,11 @@ import {css} from 'lit';
 export const styles = css`
   :host {
     color: var(--blue);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .vector-control-wrapper {
-    padding-bottom: 0.5rem;
+    padding-bottom: 1.5rem;
   }
 
   input[type='range']::-webkit-slider-runnable-track {
@@ -21,14 +21,14 @@ export const styles = css`
   input[type='range']::-webkit-slider-runnable-track {
     height: 10px;
     -webkit-appearance: none;
-    color: var(--blue);
+    color: var(--blue-600);
     margin-top: -5px;
   }
 
   input[type='number'] {
-    border: 1px solid var(--blue);
+    border: 1px solid var(--blue-300);
     border-radius: 0.5rem;
-    color: var(--blue);
+    color: var(--blue-600);
     width: 4rem;
   }
 `;

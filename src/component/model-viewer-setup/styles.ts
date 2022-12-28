@@ -3,7 +3,7 @@ import {css} from 'lit';
 export const styles = css`
   :host {
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin: 0 auto;
     padding: 2rem;
   }
@@ -30,23 +30,22 @@ export const styles = css`
     padding-top: 2rem;
     display: block;
     position: absolute;
-    color: var(--blue);
-    font-size: 1.5rem;
+    color: var(--blue-600);
+    font-size: 1.4rem;
   }
 
   .delete-button {
+    background-image: url('/static/icon/trashbin.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 2rem;
     position: absolute;
-    margin-top: -1rem;
-    width: 4rem;
-    transition: font-size 0.15s ease-in-out;
-  }
-
-  .delete-button:hover {
-    font-size: 1.75rem;
+    margin-top: -0.75rem;
+    width: 3rem;
   }
 
   .headline {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     margin-top: -1rem;
     position: absolute;
   }
@@ -60,28 +59,36 @@ export const styles = css`
   }
 
   .is-open {
-    max-height: 15rem;
+    max-height: 20rem;
   }
 
   .text-preview {
-    color: gray;
-    font-size: 1.2rem;
-    margin-top: 1.25rem;
+    color: hsl(var(--grey-600));
+    font-size: 1.4rem;
+    margin-top: 1.8rem;
   }
 
   .hotspot-settings {
-    border: 2px solid var(--blue);
+    border: 2px solid var(--blue-light);
     border-radius: 1rem;
     margin-bottom: 3.5rem;
     padding: 0 1rem;
     animation: fadeIn 0.5s;
   }
 
-  .text-control-wrapper {
-    margin: 0.5rem 0 0.75rem 0.5rem;
-  }
-
   .closing {
     animation: fadeOut 0.25s;
+  }
+
+  .label-input {
+    color: hsl(var(--grey-800));
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    width: 92%;
+  }
+
+  .add-text {
+    margin-left: 0.8rem;
   }
 `;

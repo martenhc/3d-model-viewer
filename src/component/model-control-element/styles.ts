@@ -2,8 +2,8 @@ import {css} from 'lit';
 
 export const styles = css`
   .text {
-    color: var(--blue);
-    font-size: 1.5rem;
+    color: var(--blue-600);
+    font-size: 1.4rem;
   }
 
   .model-url-input {

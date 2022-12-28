@@ -5,6 +5,7 @@ export const buttonStyle = css`
     background: none;
     background-color: #fff;
     border: none;
+    color: hsl(var(--grey-800));
     cursor: pointer;
     -webkit-appearance: none;
   }

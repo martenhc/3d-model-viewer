@@ -7,6 +7,7 @@ import {repeat} from 'lit/directives/repeat.js';
 import {styles} from './styles';
 import {classMap} from 'lit/directives/class-map.js';
 import {when} from 'lit/directives/when.js';
+import PlusIcon from '../../asset/icon/plus';
 import '@component/vector-control-element/vector-control-element';
 import '@component/model-control-element/model-control-element';
 
@@ -156,20 +157,21 @@ export class ModelViewerSetupElement extends ModelViewerElement {
                 'is-open': index === this._openedIndex,
               })}"
             >
-              <vector-control-element
-                .hotspotIndex=${index}
-                .onValueChanged=${this._onValueChanged.bind(this)}
-                .position=${hotspot.position}
-              ></vector-control-element>
-              <div class="text-control-wrapper">
-                Text:
+              <div>
+                Label:
                 <input
                   type="text"
+                  class="label-input"
                   value=${hotspot.text}
                   @change=${this._onTextChange}
                   data-index=${index}
                 />
               </div>
+              <vector-control-element
+                .hotspotIndex=${index}
+                .onValueChanged=${this._onValueChanged.bind(this)}
+                .position=${hotspot.position}
+              ></vector-control-element>
             </div>
 
             <button
@@ -177,18 +179,18 @@ export class ModelViewerSetupElement extends ModelViewerElement {
               data-index=${index}
               @click=${this._onRemoveButtonClick}
               title="delete hotspot"
-            >
-              &#x1f5d1;
-            </button>
+              aria-label="delete hotspot number ${index + 1}"
+            ></button>
           </div>`;
         })}
         ${when(!this._errorMessage, () => {
           return html`<button
-            class="text-preview "
+            class="text-preview"
             @click=${this._onAddButtonClick}
             title="add new hotspot"
+            aria-label="add new hotspot"
           >
-            &#10133; Add hotspot
+            ${PlusIcon} <span class="add-text">Add hotspot</span>
           </button> `;
         })}
         </div>

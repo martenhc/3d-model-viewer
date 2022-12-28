@@ -1,4 +1,8 @@
 :root {
-    --blue: #1a73e8;
+    --blue-300: #8ab4f8;
+    --blue-600: #1A73E8;
+    --blue-light: #DEE8F7;
+    --grey-600: 207, 5%, 52%;
+    --grey-800: 206, 6%, 25%;
 }
 
