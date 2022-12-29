@@ -7,7 +7,7 @@ import {styles} from './styles';
 export class ModelControlElement extends LitElement {
   static styles = styles;
 
-  @property() errorMessage: string = '';
+  @property({type: String}) errorMessage: string = '';
 
   _onModelUrlChange(event: Event) {
     const newModelUrl = (event.target as HTMLInputElement).value;
