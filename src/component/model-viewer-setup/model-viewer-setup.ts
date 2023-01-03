@@ -24,18 +24,23 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       (this._errorMessage = errorMessage);
   }
 
-  private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
-    // If this is a hotspot deletion, no need to update hotspots postion.
-    if (this.$domHotspots.length <= hotspots.length) {
+  private _updateModelViewer() {
+    this.requestUpdate();
+
+    // Wait for the $domHotspots to be updated
+    setTimeout(() => {
       const modelViewerHotspots = getModelViewerHotspotInformation(
         this.$domHotspots,
-        hotspots.map(hotspot => hotspot.position)
+        this.hotspots.map(hotspot => hotspot.position)
       );
 
       this._modelViewer.hotspots = modelViewerHotspots;
-    }
+    });
+  }
 
-    this.requestUpdate();
+  private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
+    this.hotspots = hotspots;
+    this._updateModelViewer();
   }
 
   private _onAddButtonClick() {
@@ -44,9 +49,9 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       text: 'New hotspot',
     });
 
-    this._openedIndex = this.hotspots.length - 1;
+    this._updateModelViewer();
 
-    this.requestUpdate();
+    this._openedIndex = this.hotspots.length - 1;
   }
 
   private _onModelChange({detail: newModelUrl}: CustomEvent<string>) {
@@ -70,8 +75,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
             .index=${index}
             .hotspots=${this.hotspots}
             .openedIndex=${this._openedIndex}
-            @hotspot-update=${(event: CustomEvent<Array<Hotspot>>) =>
-              this._configureHotspots(event)}
+            @hotspot-update=${this._configureHotspots}
             @headline-click=${this._updateOpenedIndex}
           ></hotspot-control-element>`;
         })}
