@@ -1,6 +1,6 @@
 import {ModelViewerElement} from '@component/model-viewer/model-viewer';
 import {html} from 'lit';
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, queryAll, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
 import {styles} from './styles';
 import {when} from 'lit/directives/when.js';
@@ -9,6 +9,7 @@ import {Hotspot} from '@data/type/hotspot';
 import {getModelViewerHotspotInformation} from '@util/hotspot';
 import '@component/model-control-element/model-control-element';
 import '@component/hotspot-control-element/hotspot-control-element';
+import {HotspotControlElement} from '@component/hotspot-control-element/hotspot-control-element';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
@@ -17,6 +18,9 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   @state() _openedIndex: number | null = 0;
   @state() _errorMessage = '';
 
+  @queryAll('hotspot-control-element')
+  $hotspotControlElements!: Array<HotspotControlElement>;
+
   protected firstUpdated(): void {
     super.firstUpdated();
 
@@ -24,7 +28,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       (this._errorMessage = errorMessage);
   }
 
-  private _updateModelViewer() {
+  private _updateModelViewer(updateCallback?: () => void) {
     this.requestUpdate();
 
     // Wait for the $domHotspots to be updated
@@ -35,12 +39,22 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       );
 
       this._modelViewer.hotspots = modelViewerHotspots;
+
+      updateCallback && updateCallback();
     });
   }
 
   private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
     this.hotspots = hotspots;
-    this._updateModelViewer();
+
+    // If there's a deletion, update the controls
+    if (this.hotspots.length < this.$domHotspots.length) {
+      this._updateModelViewer(() =>
+        this.$hotspotControlElements.forEach(element => element.requestUpdate())
+      );
+    } else {
+      this._updateModelViewer();
+    }
   }
 
   private _onAddButtonClick() {
