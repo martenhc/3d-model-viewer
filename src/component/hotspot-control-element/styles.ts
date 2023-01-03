@@ -1,6 +1,24 @@
 import {css} from 'lit';
 
 export const styles = css`
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
   .axis-controls-container {
     line-height: 3rem;
     margin: 1rem 0;
@@ -49,5 +67,9 @@ export const styles = css`
 
   .is-open {
     max-height: 20rem;
+  }
+
+  .closing {
+    animation: fadeOut 0.25s;
   }
 `;

@@ -28,7 +28,10 @@ export class HotspotControlElement extends LitElement {
 
       setTimeout(() => {
         this.hotspots.splice(parseInt(stringIndex), 1);
-        this.requestUpdate();
+
+        this.dispatchEvent(
+          new CustomEvent('hotspot-update', {detail: this.hotspots})
+        );
       }, 250); // 250ms is what the closing animation takes
     }
   }
@@ -60,7 +63,9 @@ export class HotspotControlElement extends LitElement {
         event.target as HTMLInputElement
       ).value;
 
-      this.requestUpdate();
+      this.dispatchEvent(
+        new CustomEvent('hotspot-update', {detail: this.hotspots})
+      );
     }
   }
 
@@ -91,7 +96,9 @@ export class HotspotControlElement extends LitElement {
     },
     [] as Array<Hotspot>);
 
-    dispatchEvent(new CustomEvent('hotspot-change', {detail: this.hotspots}));
+    this.dispatchEvent(
+      new CustomEvent('hotspot-update', {detail: this.hotspots})
+    );
   }
 
   render() {

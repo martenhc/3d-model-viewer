@@ -24,13 +24,18 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       (this._errorMessage = errorMessage);
   }
 
-  private _configureHotspots({detail: hotspots}: CustomEvent) {
-    const modelViewerHotspots = getModelViewerHotspotInformation(
-      this.$domHotspots,
-      (hotspots as Array<Hotspot>).map(hotspot => hotspot.position)
-    );
+  private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
+    // If this is a hotspot deletion, no need to update hotspots postion.
+    if (this.$domHotspots.length <= hotspots.length) {
+      const modelViewerHotspots = getModelViewerHotspotInformation(
+        this.$domHotspots,
+        hotspots.map(hotspot => hotspot.position)
+      );
 
-    this._modelViewer.hotspots = modelViewerHotspots;
+      this._modelViewer.hotspots = modelViewerHotspots;
+    }
+
+    this.requestUpdate();
   }
 
   private _onAddButtonClick() {
@@ -44,14 +49,12 @@ export class ModelViewerSetupElement extends ModelViewerElement {
     this.requestUpdate();
   }
 
-  private _onModelChange(event: CustomEvent<string>) {
-    const newModelUrl = event.detail;
+  private _onModelChange({detail: newModelUrl}: CustomEvent<string>) {
     this._modelViewer.updateModelUrl(newModelUrl);
     this.hotspots = [];
-    this.requestUpdate();
   }
 
-  private _updateOpenedIndex({detail: index}: CustomEvent) {
+  private _updateOpenedIndex({detail: index}: CustomEvent<number | null>) {
     this._openedIndex = index;
   }
 
@@ -67,7 +70,8 @@ export class ModelViewerSetupElement extends ModelViewerElement {
             .index=${index}
             .hotspots=${this.hotspots}
             .openedIndex=${this._openedIndex}
-            @hotspot-change=${this._configureHotspots}
+            @hotspot-update=${(event: CustomEvent<Array<Hotspot>>) =>
+              this._configureHotspots(event)}
             @headline-click=${this._updateOpenedIndex}
           ></hotspot-control-element>`;
         })}
