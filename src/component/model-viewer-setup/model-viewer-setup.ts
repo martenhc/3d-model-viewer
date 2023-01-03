@@ -7,9 +7,9 @@ import {when} from 'lit/directives/when.js';
 import PlusIcon from '../../asset/icon/plus';
 import {Hotspot} from '@data/type/hotspot';
 import {getModelViewerHotspotInformation} from '@util/hotspot';
-import '@component/model-control-element/model-control-element';
-import '@component/hotspot-control-element/hotspot-control-element';
-import {HotspotControlElement} from '@component/hotspot-control-element/hotspot-control-element';
+import {HotspotControlElement} from '@component/control-element/hotspot-control-element/hotspot-control-element';
+import '@component/control-element/model-control-element/model-control-element';
+import '@component/control-element/hotspot-control-element/hotspot-control-element';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
