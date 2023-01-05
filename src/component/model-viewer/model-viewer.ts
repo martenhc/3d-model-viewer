@@ -1,5 +1,11 @@
 import {LitElement, html} from 'lit';
-import {customElement, property, query, queryAll} from 'lit/decorators.js';
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from 'lit/decorators.js';
 import {ModelViewer} from 'src/class/model-viewer';
 import {repeat} from 'lit/directives/repeat.js';
 import {Hotspot} from '@data/type/hotspot';

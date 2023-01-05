@@ -7,7 +7,8 @@ export const styles = css`
   }
 
   .model-url-input {
-    width: 13.25rem;
+    padding: 0.5rem;
+    width: 15rem;
   }
 
   .error-text {

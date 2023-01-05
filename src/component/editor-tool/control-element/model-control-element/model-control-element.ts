@@ -7,11 +7,17 @@ import {styles} from './styles';
 export class ModelControlElement extends LitElement {
   static styles = styles;
 
+  private PLACEHOLDER = '/static/model/astronaut.glb';
+
   @property({type: String}) errorMessage: string = '';
 
   _onModelUrlChange(event: Event) {
     const newModelUrl = (event.target as HTMLInputElement).value;
-    this.dispatchEvent(new CustomEvent('model-change', {detail: newModelUrl}));
+    this.dispatchEvent(
+      new CustomEvent('model-change', {
+        detail: newModelUrl !== '' ? newModelUrl : this.PLACEHOLDER,
+      })
+    );
   }
 
   render() {
@@ -20,7 +26,7 @@ export class ModelControlElement extends LitElement {
         class="model-url-input"
         @change=${this._onModelUrlChange}
         type="text"
-        placeholder="/static/model/astronaut.glb"
+        placeholder="${this.PLACEHOLDER}"
       />
       ${when(!!this.errorMessage, () => {
         return html`<div class="error-text">

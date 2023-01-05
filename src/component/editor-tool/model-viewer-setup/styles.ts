@@ -9,14 +9,20 @@ export const styles = css`
   }
 
   .controls-wrapper {
-    padding-top: 2rem;
-    display: block;
-    position: absolute;
     color: var(--blue-600);
+    display: block;
     font-size: 1.4rem;
+    padding-top: 2rem;
+    position: absolute;
+    width: 24.8rem;
   }
 
   .add-text {
     margin-left: 0.8rem;
+  }
+
+  .script-display-wrapper {
+    bottom: 0;
+    position: fixed;
   }
 `;

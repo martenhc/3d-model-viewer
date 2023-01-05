@@ -31,4 +31,10 @@ export const styles = css`
     color: var(--blue-600);
     width: 4rem;
   }
+
+  .vector-name-wrapper {
+    display: inline-block;
+    padding-left: 0.5rem;
+    width: 2rem;
+  }
 `;

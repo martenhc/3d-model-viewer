@@ -10,11 +10,13 @@ import {getModelViewerHotspotInformation} from '@util/hotspot';
 import {HotspotControlElement} from '@component/editor-tool/control-element/hotspot-control-element/hotspot-control-element';
 import '@component/editor-tool/control-element/model-control-element/model-control-element';
 import '@component/editor-tool/control-element/hotspot-control-element/hotspot-control-element';
+import '@component/editor-tool/script-display/script-display';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
   static styles = [...super.styles, styles];
 
+  @state() _modelUrl = `${document.location.href}static/model/astronaut.glb`;
   @state() _openedIndex: number | null = 0;
   @state() _errorMessage = '';
 
@@ -69,6 +71,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
 
   private _onModelChange({detail: newModelUrl}: CustomEvent<string>) {
     this._modelViewer.updateModelUrl(newModelUrl);
+    this._modelUrl = newModelUrl;
     this.hotspots = [];
   }
 
@@ -103,8 +106,14 @@ export class ModelViewerSetupElement extends ModelViewerElement {
           </button> `;
         })}
         </div>
-        ${super.render()}
       </div>
+      <div class="script-display-wrapper">
+        <script-display 
+          .modelUrl=${this._modelUrl}
+          .hotspots=${this.hotspots}
+        ></script-display>
+      </div>
+      ${super.render()}
     `;
   }
 }
