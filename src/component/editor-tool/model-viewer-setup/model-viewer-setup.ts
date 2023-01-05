@@ -30,41 +30,32 @@ export class ModelViewerSetupElement extends ModelViewerElement {
       (this._errorMessage = errorMessage);
   }
 
-  private _updateModelViewer(updateCallback?: () => void) {
-    // Wait for the base component to update to have the right amount of $domHotspots
+  private _updateModelViewerHotspots() {
+    // Wait for the $domHotspots to have the right amount of elements
+    // in case there was an addition or deletion.
     super.updateComplete.then(() => {
-      const modelViewerHotspots = getModelViewerHotspotInformation(
+      this._modelViewer.hotspots = getModelViewerHotspotInformation(
         this.$domHotspots,
         this.hotspots.map(hotspot => hotspot.position)
       );
-
-      this._modelViewer.hotspots = modelViewerHotspots;
-
-      updateCallback && updateCallback();
     });
   }
 
-  private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
+  private _updateHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
     this.hotspots = [...hotspots];
-
-    super.updateComplete.then(() => {
-      const modelViewerHotspots = getModelViewerHotspotInformation(
-        this.$domHotspots,
-        this.hotspots.map(hotspot => hotspot.position)
-      );
-
-      this._modelViewer.hotspots = modelViewerHotspots;
-    });
+    this._updateModelViewerHotspots();
   }
 
   private _onAddButtonClick() {
-    this.hotspots.push({
-      position: [0, 0, 0],
-      text: 'New hotspot',
-    });
+    this.hotspots = [
+      ...this.hotspots,
+      {
+        position: [0, 0, 0],
+        text: 'New hotspot',
+      },
+    ];
 
-    this._updateModelViewer();
-
+    this._updateModelViewerHotspots();
     this._openedIndex = this.hotspots.length - 1;
   }
 
@@ -90,7 +81,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
             .index=${index}
             .hotspots=${this.hotspots}
             .openedIndex=${this._openedIndex}
-            @hotspot-update=${this._configureHotspots}
+            @hotspot-update=${this._updateHotspots}
             @headline-click=${this._updateOpenedIndex}
           ></hotspot-control-element>`;
         })}
