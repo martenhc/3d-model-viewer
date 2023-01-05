@@ -4,7 +4,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import {Hotspot, VectorUpdate} from '@data/type/hotspot';
 import {styles} from './styles';
 import {buttonStyle} from 'src/style/button';
-import '@component/control-element/vector-control-element/vector-control-element';
+import '@component/editor-tool/control-element/vector-control-element/vector-control-element';
 
 @customElement('hotspot-control-element')
 export class HotspotControlElement extends LitElement {

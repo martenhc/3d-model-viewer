@@ -4,12 +4,12 @@ import {customElement, queryAll, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
 import {styles} from './styles';
 import {when} from 'lit/directives/when.js';
-import PlusIcon from '../../asset/icon/plus';
+import PlusIcon from '../../../asset/icon/plus';
 import {Hotspot} from '@data/type/hotspot';
 import {getModelViewerHotspotInformation} from '@util/hotspot';
-import {HotspotControlElement} from '@component/control-element/hotspot-control-element/hotspot-control-element';
-import '@component/control-element/model-control-element/model-control-element';
-import '@component/control-element/hotspot-control-element/hotspot-control-element';
+import {HotspotControlElement} from '@component/editor-tool/control-element/hotspot-control-element/hotspot-control-element';
+import '@component/editor-tool/control-element/model-control-element/model-control-element';
+import '@component/editor-tool/control-element/hotspot-control-element/hotspot-control-element';
 
 @customElement('model-viewer-setup')
 export class ModelViewerSetupElement extends ModelViewerElement {
@@ -31,8 +31,7 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   private _updateModelViewer(updateCallback?: () => void) {
     this.requestUpdate();
 
-    // Wait for the $domHotspots to be updated
-    setTimeout(() => {
+    this.updateComplete.then(() => {
       const modelViewerHotspots = getModelViewerHotspotInformation(
         this.$domHotspots,
         this.hotspots.map(hotspot => hotspot.position)
