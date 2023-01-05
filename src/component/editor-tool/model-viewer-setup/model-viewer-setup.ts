@@ -1,6 +1,6 @@
 import {ModelViewerElement} from '@component/model-viewer/model-viewer';
 import {html} from 'lit';
-import {customElement, queryAll, state} from 'lit/decorators.js';
+import {customElement, query, queryAll, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
 import {styles} from './styles';
 import {when} from 'lit/directives/when.js';
@@ -31,9 +31,8 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   }
 
   private _updateModelViewer(updateCallback?: () => void) {
-    this.requestUpdate();
-
-    this.updateComplete.then(() => {
+    // Wait for the base component to update to have the right amount of $domHotspots
+    super.updateComplete.then(() => {
       const modelViewerHotspots = getModelViewerHotspotInformation(
         this.$domHotspots,
         this.hotspots.map(hotspot => hotspot.position)
@@ -46,16 +45,16 @@ export class ModelViewerSetupElement extends ModelViewerElement {
   }
 
   private _configureHotspots({detail: hotspots}: CustomEvent<Array<Hotspot>>) {
-    this.hotspots = hotspots;
+    this.hotspots = [...hotspots];
 
-    // If there's a deletion, update the controls
-    if (this.hotspots.length < this.$domHotspots.length) {
-      this._updateModelViewer(() =>
-        this.$hotspotControlElements.forEach(element => element.requestUpdate())
+    super.updateComplete.then(() => {
+      const modelViewerHotspots = getModelViewerHotspotInformation(
+        this.$domHotspots,
+        this.hotspots.map(hotspot => hotspot.position)
       );
-    } else {
-      this._updateModelViewer();
-    }
+
+      this._modelViewer.hotspots = modelViewerHotspots;
+    });
   }
 
   private _onAddButtonClick() {
